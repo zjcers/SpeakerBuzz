@@ -1,0 +1,2 @@
+As of Oct 19, there are several hardcoded values in the SPI driver (namely, the frame length and bit rate).
+Conveniently, the values picked line up perfectly with the DAC8311, so for right now, it's good enough (tm).
