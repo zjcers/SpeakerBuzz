@@ -1,0 +1,28 @@
+\documentclass{article}
+
+\title{Audio BoosterPack Proposal}
+\author{Zane J Cersovsky}
+\date{September 30, 2017}
+
+\begin{document}
+    \maketitle
+    \paragraph{First Lab}
+    The very first thing to do would be something akin to the current SpeakerBuzz lab. While this lab wouldn't offer 
+    much in terms of complexity, it is a solid place to start. This lab would consist of bringing the necessary hardware
+    online and then generating a constant frequency tone. Like the current SpeakerBuzz lab, it would intentionally suffer 
+    from the interference of the other tasks (since this would not be using FreeRTOS).
+
+    \paragraph{Second Lab}
+    In the second lab, I would like to introduce the notion of interrupts and hardware timers. It would be based on the 
+    first lab, but would move the logic for generating the tone into a timer ISR. This would be a fairly easy introduction,
+    in my opinion, to both timers and interrupts since it maps directly to the timer that would be kept in "userspace" in 
+    the first lab.
+
+    \paragraph{Third Lab}
+    Lastly, I would like to do a lab utilizing the FPU on the Cortex M4. Following the pattern above, it would be based on the 
+    previous lab. The difference is that instead of a constant tone, this lab would involve doing a frequency sweep. I have yet 
+    to decide between which to frequencies, but that is mostly a function of finding a wide-enough range to be meaningful while 
+    not giving the TA headaches. Furthermore, it would probably be a good idea to have the sweep either repeat or reverse so 
+    that the program never actually terminates.
+
+\end{document}
