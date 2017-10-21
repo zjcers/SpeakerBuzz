@@ -4,3 +4,6 @@ Packages/FreeRTOS/**
 **/*.o
 firmware.axf
 firmware.bin
+**/*.aux
+**/*.log
+**/*.pdf
