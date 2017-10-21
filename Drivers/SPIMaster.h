@@ -49,4 +49,4 @@ extern void SPIMInit(struct SPIInstance* inst, enum SPIDevice dev, enum SPIProto
  * @param buf A buffer to write to the SPI device
  * @param n The number of bytes to write
  */
-extern void SPIMWrite(struct SPIInstance* inst, void* buf, size_t n);
+extern void SPIMWrite(struct SPIInstance* inst, uint16_t* buf, size_t n);

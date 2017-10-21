@@ -54,7 +54,7 @@ void SPIMInit(struct SPIInstance* inst, enum SPIDevice dev, enum SPIProtocol pro
     SSIEnable(SSI_configs[dev].SSI_base_addr);
 }
 
-void SPIMWrite(struct SPIInstance* inst, void* buf, size_t n)
+void SPIMWrite(struct SPIInstance* inst, uint16_t* buf, size_t n)
 {
     uint32_t base = (uint32_t)(inst->base_addr);
     for(size_t i = 0; i < n; i++)
