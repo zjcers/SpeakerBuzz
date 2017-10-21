@@ -5,7 +5,10 @@
  * the I2C Master driver in the Tiva Sensor Library
  */
 #pragma once
+
+#include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "Packages/driverlib/ssi.h"
 
 #define SPI_bit_rate 20000000

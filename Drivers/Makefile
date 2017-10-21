@@ -1,2 +1,2 @@
 include ../makedefs
-all: test.o
+all: SPIMaster.o
