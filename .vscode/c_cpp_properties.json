@@ -3,16 +3,23 @@
         {
             "name": "Linux",
             "includePath": [
-                "/usr/lib/gcc/arm-none-eabi/5.4.1/include/",
+                "/usr/lib/gcc/arm-none-eabi/6.3.1/include/",
                 "/usr/include/newlib",
-                "${workspaceRoot}"
+                "${workspaceRoot}",
+                "${workspaceRoot}/Packages/FreeRTOS/Source/include",
+                "${workspaceRoot}/Packages/FreeRTOS",
+                "${workspaceRoot}/Packages",
+                "${workspaceRoot}/Packages/FreeRTOS/Source/portable/GCC/ARM_CM4F",
+                "/usr/include/newlib/c++/6.3.1/tr1"
             ],
-            "defines": ["gcc"],
+            "defines": [
+                "gcc"
+            ],
             "intelliSenseMode": "clang-x64",
             "browse": {
                 "path": [
                     "/usr/include/c++/7",
-                    "/usr/include/newlib/c++/5.4.1",
+                    "/usr/include/newlib/c++/6.3.1",
                     "/usr/include/x86_64-linux-gnu/c++/7",
                     "/usr/local/include",
                     "/usr/include",
