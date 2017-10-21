@@ -18,7 +18,7 @@ export LDFLAGS=-T link.ld --entry ResetISR
 export TIVAWARE := $(PROJDIR)/Packages/driverlib/
 export SENSORLIB := $(PROJDIR)/Packages/sensorlib/
 export FREERTOS := $(PROJDIR)/Packages/FreeRTOS/Source/
-export NEWLIB := /usr/lib/arm-none-eabi/lib/armv7e-m/fpu/
+export NEWLIB := /usr/lib/arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
