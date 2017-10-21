@@ -9,4 +9,3 @@
  * Uses GPIO N 0 and 1
  */
 void Task_Blink(void* pvParameters);
-void Task_PrintfTest(void* pvParameters);
