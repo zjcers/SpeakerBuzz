@@ -1,0 +1,207 @@
+\documentclass{article}
+\usepackage{tabularx}
+\title{Speakerbuzz and beyond}
+\author{Zane Cersovsky}
+\begin{document}
+\maketitle
+\paragraph{Observations and Current Knowledge}
+
+The Audio Boosterpack has a Serial Peripheral Interface-driven Digital Audio Converter and an amplifier.
+The first item is concerning since Tivaware only has built in drivers for its Synchronous Serial Interface.
+The SSI peripheral can implement SPI, but since the driver is generic for several different protocols, so 
+a more specific SPI abstraction should be constructed. Secondly, the amplifier may be configurable or require
+some sort of initialization.
+
+\paragraph{Design}
+\subparagraph{Overview}
+As mentioned previously, an abstraction (driver) for SPI should be implemented. One possible design 
+would be to emulate the interface of the I2C driver in Tivaware sensorlib. Barring jumping to embedded C++,
+this may be one of the cleaner ways to implement this. Similarly, a thin layer should be implemented over 
+the DAC. This layer should be able to initialize, reconfigure, and write to the DAC through the SPI driver. 
+Over top of this, a driver for the entire Boosterpack should encapsulate at least the DAC and amplifier, if 
+the amplifier requires configuration. In the future, other components or related functionality could be 
+integrated here. None of these drivers should worry about concurrency since it is possible that various 
+parts of them could be driven by interrupts, a main loop, or a real time operating system.
+
+\subparagraph{SPI driver}
+The first step will be to build the SPI driver. Taking a hint from the TI sensorlib drivers, the actual initialization
+of the ports will be left to the user since this driver should not "own" the hardware it controls. (Though it would be 
+handy to provide a method to configure the given SSI device to work in SPI mode.) This driver will be a simple wrapper 
+around the SSI driver in TI driverlib. As mentioned previously, this driver leaves concurrency up to the programmer. \\
+
+\begin{tabularx}{\linewidth}{| X | X |}
+    \hline
+    Method Name & Description \\
+    \hline
+    \texttt{SPIInit(SPIInstance, SSIDevice)} & Initializes the SPIInstance data structure and the given SSI device. \\
+    \texttt{SPIWrite(SPIInstance, Buffer, BufferSize)} & Writes the buffer to the device \\
+    \hline
+\end{tabularx}
+
+\subparagraph{DAC driver}
+This driver will handle communications with a TI DAC8311 at a higher level, using the SPI driver. While it would be 
+possible for this driver to be able to play sounds (by configuring a timer interrupt), this will not be provided since that is 
+the point of the labs. What it will provide are methods to configure the DAC and write values to it. \\
+
+\begin{tabularx}{\linewidth}{| X | X |}
+    \hline
+    Method Name & Description \\
+    \hline
+    \texttt{DACInit(DACInstance, SPIInstance)} & Initializes the DACInstance data structure and the connected DAC \\
+    \texttt{DACWrite(DACInstance, Data)} & Writes a single value to the DAC \\
+    \hline
+\end{tabularx}
+
+\subparagraph{Boosterpack driver}
+Lastly, the Boosterpack driver will initialize the previous two drivers and configure them for use with an Audio Boosterpack. It 
+will also handle the configuration of other devices on, or related to the Boosterpack (such as the amplifier). The DAC writing 
+functionality will be made available in a simplified form so that it will be easy to use in the labs but not encroach on the labs
+ themselves.
+
+\paragraph{Exploration}
+\subparagraph{Overview}
+Future question: Can I clock frames out of the SSI with a timer or timer interrupt? This would be useful since the process would 
+only have to refill the hardware FIFO every 8 frames (the size of the FIFO).
+
+\subparagraph{SSI Pinout}
+\begin{center}
+    \begin{tabular}{| r | r | r |}
+        \hline
+        SSI Device & Function & Pin \\ 
+        \hline
+        0 & Clock & PA2 \\
+        & I/O 0 & PA4 \\
+        & I/O 1 & PA5 \\
+        & I/O 2 & PA6 \\
+        & I/O 3 & PA7 \\
+        \hline
+        1 & Clock & PB5 \\
+        & I/O 0 & PE4 \\
+        & I/O 1 & PE5 \\
+        & I/O 2 & PD4 \\
+        & I/O 3 & PD5 \\
+        \hline
+        2 & Clock & PD3 \\
+        & I/O 0 & PD1 \\
+        & I/O 1 & PD0 \\
+        & I/O 2 & PD7 \\
+        & I/O 3 & PD6 \\
+        \hline
+        3 & Clock & PQ0 or PF2 \\
+        & I/O 0 & PQ1 or PF1 \\
+        & I/O 1 & PQ3 or PF0 \\
+        & I/O 2 & PF4 or PP0 \\
+        & I/O 3 & PP1\\
+        \hline
+    \end{tabular}\\
+This was retrieved from Table 17-1 of the TM4C1294NCPDT datasheet.
+\end{center}
+
+\subparagraph{Audio Boosterpack Pin Mapping}
+\begin{center}
+    \begin{tabular}{| r | r | r | r |}
+        \hline
+        Tiva Pin & Tiva Function & Boosterpack Pin & Function \\
+        \hline
+        & & A2-1 & Vcc \\
+        PD4 or PA0 & AIN7 & A2-5 & MIC power \\
+        PD5 or PA1 & AIN6 & A2-6 & MIC output \\
+        PQ0 & SSI3 clk & A2-7 & DAC SCLK \\
+        PQ1 & SSI3 frame signal & D2-9 & DAC SYNC \\
+        PP3 & GPIO & D2-8 & AMP on \\
+        PQ2 & SSI3 data 0 & D2-6 & DAC MOSI \\
+        PM7 & PWM & D2-2 & PWM \\
+            & & D2-1 & GND \\
+        \hline
+    \end{tabular}\\
+This was derived from the Tiva Eval board datasheet in combination with the Audio Boosterpack User Guide.
+\end{center}
+
+\paragraph{Implementation Notes}
+
+Not implemented yet.
+
+\paragraph{Lab 1}
+\subparagraph{Overview}
+This lab is similar to the current Speakerbuzz, but reimagined for the Tiva and Audio Boosterpack. A single predefined tone will 
+be emitted with the timing coming from vTaskDelay. This will provide unreliable timing, which is part of the object of the lab.
+
+\subparagraph{Hardware and Software Utilized}
+This lab will use all of the drivers that I will have to implement. These drivers then use the SSI and GPIO drivers from driverlib. 
+The hardware used includes SSI3 which needs Tiva ports Q and P enabled. FreeRTOS will be used for my convenience, but is not 
+strictly required since this could be readily adapted for the current task-loop that the early 388 labs use.
+
+\subparagraph{Program Structure}
+In the entry method (main), all of the drivers will be initialized and made available. A single task, Speakerbuzz, will look like 
+this: \\
+\begin{verbatim}
+Begin Task
+    DelayAmount := SysTickFreq/2*frequency
+    Volume := DACMaxVal/2
+    TopOfWaveform := false
+    Loop Forever
+        If TopOfWaveform
+            DACWrite(Volume)
+        Else
+            DACWrite(0)
+        End If
+        TopOfWaveform = Not TopOfWaveform
+        Delay for DelayAmount
+    End Loop
+End Task
+\end{verbatim}
+\paragraph{Lab 2}
+\subparagraph{Overview}
+This lab will build on top of the last one, but this time the timing will be derived from a timer interrupt instead of vTaskDelay 
+or check against SysTick. Once again, FreeRTOS will be used, but is not required. The point of this lab is to learn more about 
+interrupts.
+\subparagraph{Hardware and Software Utilized}
+Like the previous lab, all of the implemented drivers plus SSI and GPIO will be used. In addition, a hardware timer and 
+corresponding interrupt will be configured. The interrupt handler will perform the same function as the task in the previous lab.
+\subparagraph{Program Structure}
+\begin{verbatim}
+Begin Init
+    Init Boosterpack
+    Init Timer
+    Register Interrupt
+
+    TopOfWaveform := false
+    Volume := DACMaxVal/2
+End Init
+Begin Interrupt Handler
+    If TopOfWaveform
+        DACWrite(Volume)
+    Else
+        DACWrite(0)
+    End If
+    TopOfWaveform = Not TopOfWaveform
+End Interrupt Handler
+\end{verbatim}
+\paragraph{Lab 3}
+\subparagraph{Overview}
+Lastly, this lab builds on the last by have a separate task that changes the tone frequency along some function that requires the 
+FPU. An a example would be the function $e^x$ with the output stretched to be a nice frequency range (such as 500hz to 2000hz) and 
+$x$ reset to zero when it reaches the maximum frequency. Again, FreeRTOS is optional.
+\subparagraph{Hardware and Software Utilized}
+The modules and hardware from Lab 2 would be required since this builds on top of that lab. In addition, the FPU would need to 
+be enabled and a new task written to perform the frequency sweep.
+\subparagraph{Program Structure}
+\begin{verbatim}
+Begin Task FreqSweep
+    MinXVal := "some low number, probably zero"
+    MaxXVal := "some higher number where the frequency max is"
+    Increment := "amount to increment x for each step"
+    IncrementDelay := "amount of time between each increment"
+    X := MinXVal
+    Loop Forever
+        If X >= MaxXVal
+            X = MinXVal
+        End If
+        Frequency := Func(X)
+        TimerDelay := ToTicks(Frequency)
+        X += Increment
+        Delay(IncrementDelay)
+    End Loop
+End Task
+\end{verbatim}
+\end{document}
