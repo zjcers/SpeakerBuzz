@@ -1,3 +1,6 @@
 Packages/driverlib/**
 Packages/sensorlib/**
 Packages/FreeRTOS/**
+**/*.o
+firmware.axf
+firmware.bin
