@@ -1,2 +1,2 @@
 include ../makedefs
-all: blink.o
+all: blink.o Lab1.o

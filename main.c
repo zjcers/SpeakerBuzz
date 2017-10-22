@@ -40,8 +40,7 @@
 int main()
 {
     xTaskCreate(Task_Blink, "Blink", 128, NULL, 1, NULL);
-    xTaskCreate(Task_DACtest, "ssi", 256, NULL, 1, NULL);
-//    xTaskCreate(Task_SpeakerBuzz, "Buzz", 256, NULL, 1, NULL);
+    xTaskCreate(Task_SpeakerBuzz, "Buzz", 256, NULL, 1, NULL);
     vTaskStartScheduler();
     while(1)
     {
