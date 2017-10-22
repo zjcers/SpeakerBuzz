@@ -4,7 +4,7 @@
  * by TivaWare and provides a similar interface to that of 
  * the I2C Master driver in the Tiva Sensor Library
  */
-
+#include "System/chip.h"
 #include <stdint.h>
 //This is included to make TivaWare happy (thanks TI...)
 #include <stdbool.h>
@@ -13,7 +13,7 @@
 #include "Packages/driverlib/sysctl.h"
 #include "Drivers/SPIMaster.h"
 
-static inline void EnablePeriphBlocking(uint32_t periph)
+void EnablePeriphBlocking(uint32_t periph)
 {
     SysCtlPeripheralEnable(periph);
     while (!SysCtlPeripheralReady(periph)) {}
@@ -45,11 +45,8 @@ void SPIMInit(struct SPIInstance* inst, enum SPIDevice dev, enum SPIProtocol pro
     inst->base_addr = (void*)(SSI_configs[dev].SSI_base_addr);
     inst->protocol = protocol;
     EnablePeriphBlocking(SSI_configs[dev].periph);
-    //TODO: Make this more configurable (right now hardcoded to match DAC)
-    SSIAdvModeSet(SSI_configs[dev].SSI_base_addr, SSI_ADV_MODE_WRITE);
-    SSIAdvFrameHoldEnable(SSI_configs[dev].SSI_base_addr);
     SSIConfigSetExpClk(SSI_configs[dev].SSI_base_addr,
-                      SysCtlClockGet(),
+                      system_clock,
                       protocol,
                       SSI_MODE_MASTER,
                       SPI_bit_rate,
