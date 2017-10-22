@@ -15,3 +15,5 @@ with what the DAC requires. This might be a good thing to try after the first ve
 
 Can't put SSI device into advanced mode since I can't make frames longer than 8-bits, but the DAC needs a 16-bit 
 frame. Legacy mode works, though. Also, the correct mode for SPI for the DAC is mode1, (polarity 0, phase 1).
+
+SysCtlClockGet() doesn't work correctly on this board. Use the system_clock global instead.
