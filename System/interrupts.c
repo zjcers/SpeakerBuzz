@@ -13,6 +13,7 @@ extern char _data;
 extern char _edata;
 extern char _etext;
 
+extern void main() __attribute__ ((noreturn));
 extern void ConfigureUART();
 
 size_t system_clock = 0;
