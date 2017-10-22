@@ -9,3 +9,6 @@ pass before ~SYNC is reasserted, the invalid word is discarded.
 
 The datasheet for the Audio BoosterPack says that the speaker is driven by a TI TPA301 amplifier. The amp 
 is enabled by setting AMP ON to low (Tiva pin PP3).
+
+If the SSI peripherial of the Tiva is put into Advanced mode or higher, the frame signal lines up perfectly 
+with what the DAC requires. This might be a good thing to try after the first version is working.
