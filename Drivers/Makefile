@@ -1,2 +1,2 @@
 include ../makedefs
-all: SPIMaster.o
+all: SPIMaster.o DAC8311.o
