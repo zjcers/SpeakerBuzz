@@ -5,7 +5,6 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
-#include <stdio.h>
 #include "Drivers/AudioPack.h"
 
 #define VOLUME ((uint16_t)((1 << 14)/2))
@@ -13,7 +12,7 @@
 #define PERIOD (configTICK_RATE_HZ / FREQUENCY)
 #define HALF_PERIOD (PERIOD / 2)
 
-void Task_SpeakerBuzz(void* pvParameters)
+void Task_SpeakerBuzz_Lab1(void* pvParameters)
 {
     struct AudioInst audioDriver;
     AudioInit(&audioDriver);
