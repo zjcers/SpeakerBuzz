@@ -1,6 +1,6 @@
 /*
  * Author: Zane J Cersovsky
- * Lab 1 of 3: Basic SpeakerBuzz with timing derived from FreeRTOS's scheduler.
+ * Lab 2 of 3: Basic SpeakerBuzz with timing derived from a timer interrupt.
  */
 
 #include "FreeRTOS.h"
