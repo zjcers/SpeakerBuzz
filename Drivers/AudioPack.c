@@ -9,16 +9,17 @@
 #include "Packages/driverlib/pin_map.h"
 #include "Packages/driverlib/sysctl.h"
 #include "Packages/driverlib/gpio.h"
-void AudioInit(struct AudioInst* audioInst)
+#include "Drivers/driver_utils.h"
+static void AmpEnable()
 {
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOQ); //SPI 3 is routed through port Q
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP); //The AMP ON signal is on PP3
-    GPIOPinConfigure(GPIO_PQ0_SSI3CLK); //sclk
-    GPIOPinConfigure(GPIO_PQ1_SSI3FSS); //frame signal
-    GPIOPinConfigure(GPIO_PQ2_SSI3XDAT0); //MOSI
+    EnablePeriphBlocking(SYSCTL_PERIPH_GPIOP); //The AMP ON signal is on PP3
     GPIOPinTypeGPIOOutput(GPIO_PORTP_BASE, GPIO_PIN_3); //amp on
     GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_3, 0x00); //low to enable amp
-    SPIMInit(&(audioInst->spim), Fourth, SPI_mode_0);
+}
+void AudioInit(struct AudioInst* audioInst)
+{
+    AmpEnable();
+    SPIMInit(&(audioInst->spim), Fourth, SPI_mode_1);
     DAC8311Init(&(audioInst->dac), &(audioInst->spim));
 }
 
