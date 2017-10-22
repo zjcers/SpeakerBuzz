@@ -6,3 +6,6 @@ This mode is 0b00 for normal operation. Other values are for various power-down 
 goes first (shift register). ~SYNC is held HIGH until it is time to send a word. ~SYNC is held LOW for 
 16 falling edges of the clock signal and then set back to HIGH to update the DAC. If 16 cycles do not
 pass before ~SYNC is reasserted, the invalid word is discarded.
+
+The datasheet for the Audio BoosterPack says that the speaker is driven by a TI TPA301 amplifier. The amp 
+is enabled by setting AMP ON to low (Tiva pin PP3).
