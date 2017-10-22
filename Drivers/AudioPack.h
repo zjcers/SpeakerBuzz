@@ -14,7 +14,7 @@
 struct AudioInst {
     struct SPIInstance spim;
     struct DAC8311Instance dac;
-}
+};
 
 
 /*
@@ -28,4 +28,4 @@ extern void AudioInit(struct AudioInst* audioInst);
  * Passes through a write to the DAC driver
  * @param value - The value to write (0-2^14)
  */
-extern void DACWrite(uint16_t val);
+extern void DACWrite(struct AudioInst audioInst, uint16_t val);
