@@ -12,3 +12,6 @@ is enabled by setting AMP ON to low (Tiva pin PP3).
 
 If the SSI peripherial of the Tiva is put into Advanced mode or higher, the frame signal lines up perfectly 
 with what the DAC requires. This might be a good thing to try after the first version is working.
+
+Can't put SSI device into advanced mode since I can't make frames longer than 8-bits, but the DAC needs a 16-bit 
+frame. Legacy mode works, though. Also, the correct mode for SPI for the DAC is mode1, (polarity 0, phase 1).
