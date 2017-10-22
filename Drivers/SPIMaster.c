@@ -45,6 +45,9 @@ void SPIMInit(struct SPIInstance* inst, enum SPIDevice dev, enum SPIProtocol pro
     inst->base_addr = (void*)(SSI_configs[dev].SSI_base_addr);
     inst->protocol = protocol;
     EnablePeriphBlocking(SSI_configs[dev].periph);
+    //TODO: Make this more configurable (right now hardcoded to match DAC)
+    SSIAdvModeSet(SSI_configs[dev].SSI_base_addr, SSI_ADV_MODE_WRITE);
+    SSIAdvFrameHoldEnable(SSI_configs[dev].SSI_base_addr);
     SSIConfigSetExpClk(SSI_configs[dev].SSI_base_addr,
                       SysCtlClockGet(),
                       protocol,
