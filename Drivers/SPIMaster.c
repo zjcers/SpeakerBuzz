@@ -70,7 +70,8 @@ void SPIMInit(struct SPIInstance* inst, enum SPIDevice dev, enum SPIProtocol pro
 
 void SPIMWriteWord(struct SPIInstance* inst, uint16_t word)
 {
+    uint32_t tmp;
     uint32_t base = (uint32_t)(inst->base_addr);
     SSIDataPut(base, word);
-    SSIDataGet(base, &word); //Needed to make sure the receive FIFO does not fill up
+    SSIDataGet(base, &tmp); //Needed to make sure the receive FIFO does not fill up
 }

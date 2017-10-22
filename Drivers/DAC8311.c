@@ -16,5 +16,5 @@ void DAC8311Init(struct DAC8311Instance* dacInst, struct SPIInstance* spiInst)
 void DAC8311Write(struct DAC8311Instance* dacInst, uint16_t value)
 {
     value &= ~(0b11 << 14); //Clear the highest two bits to specify "normal operation" of the DAC
-    SPIMWrite(dacInst->spim, value); //Write value
+    SPIMWriteWord(dacInst->spim, value); //Write value
 }
