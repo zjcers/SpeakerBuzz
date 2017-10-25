@@ -5,8 +5,8 @@ export OBJCOPY := arm-none-eabi-objcopy
 
 
 INCLUDE_FREERTOS := -I$(PROJDIR)/Packages/FreeRTOS/Source/include/ -I$(PROJDIR)/Packages/FreeRTOS/Source/portable/GCC/ARM_CM4F/ -I$(PROJDIR)/Packages/FreeRTOS/
-export INCLUDE := -I$(PROJDIR) -I$(PROJDIR)/Packages/ $(INCLUDE_FREERTOS)
-CFLAGS_GENERAL := -Wall -Werror -g -std=c99 $(CFLAGS)
+export INCLUDE := -I/usr/include/newlib -I$(PROJDIR) -I$(PROJDIR)/Packages/ $(INCLUDE_FREERTOS)
+CFLAGS_GENERAL = -Wall -Werror -g -std=c99 $(CFLAGS)
 CFLAGS_MACHINE := -march=armv7e-m -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 CFLAGS_OPTIMIZATION := -fno-exceptions -ffunction-sections -fdata-sections -Os
 CFLAGS_TI := -Dgcc 
