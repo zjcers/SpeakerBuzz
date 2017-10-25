@@ -28,6 +28,7 @@ extern void Task_SpeakerBuzz_Lab2(void* pvParameters);
  * Does a frequency sweep using the FreeRTOS task to calulate the delay
  */
 extern void Task_SpeakerBuzz_Lab3(void* pvParameters);
+extern void Task_SpeakerBuzz_Lab4(void* pvParameters);
 
 #ifdef LAB1
 #define Task_SpeakerBuzz Task_SpeakerBuzz_Lab1
@@ -39,4 +40,8 @@ extern void Task_SpeakerBuzz_Lab3(void* pvParameters);
 
 #ifdef LAB3
 #define Task_SpeakerBuzz Task_SpeakerBuzz_Lab3
+#endif
+
+#ifdef LAB4
+#define Task_SpeakerBuzz Task_SpeakerBuzz_Lab4
 #endif
