@@ -8,16 +8,18 @@
 #include "driverlib/pin_map.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/uart.h"
+#include "Packages/driverlib/rom.h"
+#include "Packages/driverlib/rom_map.h"
 
 void ConfigureUART()
 {
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-    GPIOPinConfigure(GPIO_PA0_U0RX);
-    GPIOPinConfigure(GPIO_PA1_U0TX);
-    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-    UARTConfigSetExpClk(UART0_BASE, system_clock, 115200, UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE);
-    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_UART0))
+    MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+    MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    MAP_GPIOPinConfigure(GPIO_PA0_U0RX);
+    MAP_GPIOPinConfigure(GPIO_PA1_U0TX);
+    MAP_GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+    MAP_UARTConfigSetExpClk(UART0_BASE, system_clock, 115200, UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE);
+    while(!MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_UART0))
 	{
 	}
 }
