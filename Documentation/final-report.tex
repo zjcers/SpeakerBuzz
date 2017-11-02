@@ -6,7 +6,7 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 
-\lstset{language=C, breaklines=true}
+\lstset{breaklines=true}
 \pgfplotsset{compat=1.15}
 
 \title{EECS 690 Project 2}
@@ -534,4 +534,87 @@ an oscilloscope while being written.
 \lstinputlisting{../Tasks/Lab4.c}
 \subsection{Listing of main.c}
 \lstinputlisting{../main.c}
-\pagebreak\end{document}
+\pagebreak
+\section{Lab Write-ups}
+\subsection{Lab 1}
+
+\paragraph{Introduction}
+In this lab, you will write a task to make a constant tone using the DAC8311 present on the 
+Audio BoosterPack\textregistered. This will introduce both the DAC and the notion of critical timing.
+
+\paragraph{DAC Background}
+The Digital-to-Analog-Convertor present on the Audio BoosterPack\textregistered takes a digital value 
+through a serial interface known as Serial Peripheral Interface and produce an analog voltage in roughly 
+linear steps. That is, it is possible to write 1000 to the DAC and have that result in $\frac{1000}{2^{bits_{DAC}}} * V_{ref}$ volts.
+
+\paragraph{SPI Background}
+SPI is a simple 3 or 4 wire serial protocol consisting of a clock signal, Master-In Slave-Out, Master-Out Slave-In, 
+and Slave/Device Select. For the purposes of this lab, those details are hidden with a provided driver.
+
+\paragraph{Actions}
+\begin{itemize}
+    \item Create a new task modelled on the structure of the provided blinky task.
+    \item Initialize the provided Audio BoosterPack\textregistered\space driver.
+    \item In the task loop, make a square wave output by writing ${2^{14}-1}$ (the maximum value of DAC) 
+        and zero. The time between these writes can be derived by looking at the formula for the 
+        period of the provided frequency.
+    \item Observe the output wave using a oscilloscope.
+\end{itemize}
+\pagebreak
+
+\subsection{Lab 2}
+\paragraph{Introduction}
+In the previous lab, the signal was not perfect. In addition quite a bit of logic was used 
+simply to generate the timing of the square wave. Luckily, the hardware of the microcontroller 
+provides timers. These timers can trigger processor interrupts that immediately jump control to 
+a registered handler method.
+
+\paragraph{Timer Background}
+Inside of the microcontroller, there are hardware blocks known as ``General Purpose Timers''. 
+These are essentially counters (though they typically are configured to count down) that are driven 
+by the main CPU clock. The input clock can also be divided if configured as such. Those two settings 
+allow the period of the timer to be controlled.
+
+\paragraph{Actions}
+\begin{itemize}
+    \item Adapt the previous lab, retaining only the structure of the SpeakerBuzz task and the initialization
+     code.
+    \item You will need to also initialize a General Purpose Timer as documented in the Tivaware datasheet to 
+    have a period equal to the period of the previous lab.
+    \item Write an interrupt Service Routine that toggles the DAC output like the 
+    the previous lab's task did.
+    \item Register the ISR with the timer.
+    \item Observe the output on the oscilloscope.
+\end{itemize}
+\pagebreak
+
+\subsection{Lab 3}
+\paragraph{Introduction}
+In the previous two labs, a constant tone has been emitted. This lab will generate a tone that has 
+a frequency varied by a sine function. This demonstrates the floating-point capabilities of the 
+microcontroller as well as the ability to reset a running hardware timer.
+
+\paragraph{FPU Background}
+Many microcontrollers, including the LM31968 previously used in EECS 388 lacked a Floating-Point Unit. This meant 
+that the hardware was incapable of using decimal (floating-point) arithmetic. The TM4C1294XL has an FPU, which normally
+starts disabled, but has been enabled for you.
+
+\paragraph{Actions}
+\begin{itemize}
+    \item Adapt the previous lab. Instead of sleeping forever once the timer is started, the task will 
+    now run periodicly to update the timer period.
+    \item Write a small subroutine that calls \texttt{double sin(double)} and scales the value into values usable as 
+    timer inputs.
+    \item In the task loop, call the frequency function with an increasing input and load the result into the 
+    timer driving the DAC output.
+    \item This resulting frequency should be centered around 600hz but vary 200hz in either direction. Remeber
+    that sine has a range of [-1.0, 1.0].
+\end{itemize}
+\pagebreak
+\subsection{Lab 4}
+\paragraph{Notes}
+This lab was not planned to originally be part of this project. As such, it will not have a write up. The gist of this 
+lab is that generates a true sine wave using a precomputed lookup table. This requires that said table be generated in the 
+task initialization (based on Lab 2). Also, the ISR must be modified to have a static index variable that increments in the range [0, 99] 
+and writes lookupTable[i] to the DAC.
+\end{document}
